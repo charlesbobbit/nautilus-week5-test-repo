@@ -1,0 +1,29 @@
+name: shop app CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Get short commit hash
+      id: version
+      run: echo ::set-output name=VERSION::$(git rev-parse --short HEAD)
+    - name: Build and deploy the Docker images
+      run: |
+        docker build -t reverseproxy ./nginx-proxy
+        docker tag reverseproxy ifakaowoh/reverseproxy:${{ steps.version.outputs.VERSION }}
+        docker build -t orders-app ./orders-service          
+        docker tag orders-app ifakaowoh/orders-app:${{ steps.version.outputs.VERSION }}
+        docker build -t products-app ./products-service
+        docker taf products-app ifakaowoh/products-app:${{ steps.version.outputs.VERSION }}
+        echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ifakaowoh --password-stdin
+        docker push ifakaowoh/reverseproxy:${{ steps.version.outputs.VERSION }}
+        docker push ifakaowoh/orders-app:${{ steps.version.outputs.VERSION }}
+        docker push ifakaowoh/products-app:${{ steps.version.outputs.VERSION }}

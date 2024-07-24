@@ -1,0 +1,17 @@
+version: "3"
+services:
+  orders-app:
+    build:
+      context: ./orders-service
+    image: orders-app:v1
+  products-app:
+    build:
+      context: ./products-service
+    image: products-app:v1
+  reverseproxy:
+    build:
+      context: ./nginx-proxy
+    image: reverseproxy:v1
+    depends_on:
+      - orders-app
+      - products-app

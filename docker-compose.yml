@@ -1,0 +1,16 @@
+version: "3"
+services:
+  reverseproxy:
+    image: reverseproxy:v1
+    ports:
+      - "8080:8080"
+    restart: always
+    depends_on:
+      - orders-app
+      - products-app
+
+  orders-app:
+    image: orders-app:v1
+  
+  products-app:
+    image: products-app:v1
