@@ -22,7 +22,7 @@ jobs:
         docker build -t orders-app ./orders-service          
         docker tag orders-app ifakaowoh/orders-app:${{ steps.version.outputs.VERSION }}
         docker build -t products-app ./products-service
-        docker taf products-app ifakaowoh/products-app:${{ steps.version.outputs.VERSION }}
+        docker tag products-app ifakaowoh/products-app:${{ steps.version.outputs.VERSION }}
         echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ifakaowoh --password-stdin
         docker push ifakaowoh/reverseproxy:${{ steps.version.outputs.VERSION }}
         docker push ifakaowoh/orders-app:${{ steps.version.outputs.VERSION }}
