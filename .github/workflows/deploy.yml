@@ -18,12 +18,12 @@ jobs:
     - name: Build and deploy the Docker images
       run: |
         docker build -t reverseproxy ./nginx-proxy
-        docker tag reverseproxy ifakaowoh/reverseproxy:${{ steps.version.outputs.VERSION }}
+        docker tag reverseproxy ifakaowoh/reverseproxy
         docker build -t orders-app ./orders-service          
-        docker tag orders-app ifakaowoh/orders-app:${{ steps.version.outputs.VERSION }}
+        docker tag orders-app ifakaowoh/orders-app
         docker build -t products-app ./products-service
-        docker tag products-app ifakaowoh/products-app:${{ steps.version.outputs.VERSION }}
+        docker tag products-app ifakaowoh/products-app
         echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ifakaowoh --password-stdin
-        docker push ifakaowoh/reverseproxy:${{ steps.version.outputs.VERSION }}
-        docker push ifakaowoh/orders-app:${{ steps.version.outputs.VERSION }}
-        docker push ifakaowoh/products-app:${{ steps.version.outputs.VERSION }}
+        docker push ifakaowoh/reverseproxy
+        docker push ifakaowoh/orders-app
+        docker push ifakaowoh/products-app
